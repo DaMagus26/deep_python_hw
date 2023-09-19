@@ -96,6 +96,7 @@ flake8 hw1/
 ### Отчет coverage
 ```bash
 coverage run -m unittest discover hw1/
+
 Name                               Stmts   Miss  Cover
 ------------------------------------------------------
 hw1/model.py                          25     11    56%
