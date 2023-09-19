@@ -28,7 +28,8 @@ def predict_message_mood(
 ) -> str:
 
     if not isinstance(model, SomeModel):
-        raise TypeError(f'model must be an instance of class SomeModel, not {type(model)}')
+        raise TypeError(
+            f'model must be an instance of class SomeModel, not {type(model)}')
 
     if bad_thresholds > good_thresholds:
         raise RuntimeError('lower threshold is greater than upper threshold')
