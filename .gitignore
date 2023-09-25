@@ -62,7 +62,10 @@ Temporary Items
 .python-version
 
 # idea
-.idea
+.idea/
+
+# playgrounds
+*playground.py
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -337,5 +340,3 @@ poetry.toml
 
 # LSP config files
 pyrightconfig.json
-
-# End of https://www.toptal.com/developers/gitignore/api/pycharm,python,macos,git
