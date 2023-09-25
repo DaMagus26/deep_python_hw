@@ -1,7 +1,9 @@
 import unittest
 from unittest import mock
 from io import FileIO
-from hw1.text_search import grep
+import sys
+sys.path.append('../')
+from text_search import grep
 
 
 class TestGrep(unittest.TestCase):
@@ -54,3 +56,7 @@ class TestGrep(unittest.TestCase):
                 'Once upon a time in a town like this\n',
                 'At the same time miles away\n'
             ])
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -72,14 +72,14 @@ pylint --rcfile .pylintrc
 
 Для запуска тестов для обоих заданий необходимо выполнить следующую команду:
 ```bash
-python3 -m unittest discover hw1/test/
+python3 -m unittest discover 01/test/
 ```
 
 ### Отчет линтеров
 
 1. **Pylint**
 ```bash
-pylint hw1/
+pylint 01/
 
 -------------------------------------------------------------------
 Your code has been rated at 10.00/10 (previous run: 9.05/10, +0.95)
@@ -89,21 +89,21 @@ Your code has been rated at 10.00/10 (previous run: 9.05/10, +0.95)
 
 2. **Flake8**
 ```bash
-flake8 hw1/
+flake8 01/
 
 ```
 
 ### Отчет coverage
 ```bash
-coverage run -m unittest discover hw1/
+coverage run -m unittest discover 01/
 
 Name                               Stmts   Miss  Cover
 ------------------------------------------------------
-hw1/model.py                          25     11    56%
-hw1/test/__init__.py                   0      0   100%
-hw1/test/test_grep.py                 33      0   100%
-hw1/test/test_predict_message.py      28      1    96%
-hw1/text_search.py                    11      2    82%
+01/model.py                          25     11    56%
+01/test/__init__.py                   0      0   100%
+01/test/test_grep.py                 33      0   100%
+01/test/test_predict_message.py      28      1    96%
+01/text_search.py                    11      2    82%
 ------------------------------------------------------
 TOTAL                                 97     14    86%
 

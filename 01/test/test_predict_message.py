@@ -1,6 +1,8 @@
 import unittest
 from unittest import mock
-from hw1.model import SomeModel, predict_message_mood
+import sys
+sys.path.append('../')
+from model import SomeModel, predict_message_mood
 
 
 class TestPredictMessage(unittest.TestCase):
