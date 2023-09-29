@@ -21,21 +21,27 @@ class TestParseJson(unittest.TestCase):
     def test_no_keywords(self):
         mock_callback = mock.Mock()
         json_str = '{"key1": "Word1 word2", "key2": "word2 word3"}'
-        parse_json(json_str, required_fields=['key1', 'key2'], keyword_callback=mock_callback)
+        parse_json(json_str,
+                   required_fields=['key1', 'key2'],
+                   keyword_callback=mock_callback)
 
         self.assertEqual(mock_callback.call_count, 0)
 
     def test_invalid_field(self):
         mock_callback = mock.Mock()
         json_str = '{"key1": "Word1 word2", "key2": "word2 word3"}'
-        parse_json(json_str, required_fields=['key3'], keyword_callback=mock_callback)
+        parse_json(json_str,
+                   required_fields=['key3'],
+                   keyword_callback=mock_callback)
 
         self.assertEqual(mock_callback.call_count, 0)
 
     def test_empty_value(self):
         mock_callback = mock.Mock()
         json_str = '{"key1": "Word1 word2", "key2": ""}'
-        parse_json(json_str, required_fields=['key2'], keyword_callback=mock_callback)
+        parse_json(json_str,
+                   required_fields=['key2'],
+                   keyword_callback=mock_callback)
 
         self.assertEqual(mock_callback.call_count, 0)
 

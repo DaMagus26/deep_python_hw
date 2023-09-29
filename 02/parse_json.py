@@ -15,6 +15,6 @@ def parse_json(
     for field in required_fields:
         value = json_data.get(field)
         if value:
-            for kw in keywords:
-                if kw in value.split():
-                    keyword_callback(kw)
+            for keyword in keywords:
+                if keyword in value.split():
+                    keyword_callback(keyword)

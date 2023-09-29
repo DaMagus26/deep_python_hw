@@ -20,13 +20,13 @@ class TestTimer(unittest.TestCase):
 
     def test_number_of_calls(self):
         mock_func = mock.Mock()
-        result = mean(10)(mock_func)()
+        mean(10)(mock_func)()
 
         self.assertEqual(mock_func.call_count, 10)
 
     def test_propagates_args(self):
         mock_func = mock.Mock()
         args = ['Hello', 1, ValueError]
-        result = mean(10)(mock_func)(*args)
+        mean(10)(mock_func)(*args)
 
         self.assertEqual(mock_func.call_args, mock.call(*args))

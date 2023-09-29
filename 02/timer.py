@@ -1,5 +1,5 @@
-from typing import Callable, Optional, Literal
-from time import time, sleep
+from typing import Callable
+from time import time
 
 
 def mean(repeats: int = 10):
