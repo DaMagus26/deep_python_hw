@@ -1,6 +1,5 @@
 import unittest
 from unittest import mock
-import sys
 from model import SomeModel, predict_message_mood
 
 
