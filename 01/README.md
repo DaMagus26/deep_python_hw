@@ -72,7 +72,7 @@ pylint --rcfile .pylintrc
 
 Для запуска тестов для обоих заданий необходимо выполнить следующую команду:
 ```bash
-python3 -m unittest discover 01/test/
+python3 -m unittest discover 01
 ```
 
 ### Отчет линтеров
