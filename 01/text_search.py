@@ -1,13 +1,17 @@
 import re
-from typing import IO
+from typing import IO, Sequence
 
 
-def grep(file: str | IO, word: str) -> str:
-    pattern = re.compile(rf'\b{word}\b', re.IGNORECASE)
-
+def grep(file: str | IO, words: Sequence[str]) -> str:
     with open(file, 'r', encoding='UTF-8') if isinstance(file, str) else file:
-        for line in file.readlines():
-            if re.search(pattern, line):
+        for line in file:
+            found = False
+            for word in words:
+                pattern = re.compile(rf'\b{word}\b', re.IGNORECASE)
+                if re.search(pattern, line):
+                    found = True
+                    break
+            if found:
                 yield line
 
 
