@@ -1,8 +1,6 @@
 import json.decoder
 import unittest
 from unittest import mock
-import sys
-sys.path.append('../')
 from parse_json import parse_json
 
 
@@ -91,4 +89,19 @@ class TestParseJson(unittest.TestCase):
         ]
 
         self.assertEqual(mock_callback.call_count, 3)
+        self.assertListEqual(mock_callback.call_args_list, expected_calls)
+
+    def test_ignore_case(self):
+        mock_callback = mock.Mock()
+        json_str = '{"key1": "Word1 word2", "key2": "word1 word4"}'
+        parse_json(json_str,
+                   required_fields=['key1', 'key2'],
+                   keywords=['word1'],
+                   keyword_callback=mock_callback)
+
+        expected_calls = [
+            mock.call('Word1'),
+            mock.call('word1'),
+        ]
+
         self.assertListEqual(mock_callback.call_args_list, expected_calls)

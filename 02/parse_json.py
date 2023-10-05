@@ -1,5 +1,6 @@
 import json
 from typing import Sequence, Optional, Callable
+import re
 
 
 def parse_json(
@@ -16,5 +17,7 @@ def parse_json(
         value = json_data.get(field)
         if value:
             for keyword in keywords:
-                if keyword in value.split():
-                    keyword_callback(keyword)
+                pattern = re.compile(rf'\b{keyword}\b', re.IGNORECASE)
+                search_result = re.search(pattern, value)
+                if search_result:
+                    keyword_callback(search_result.group(0))

@@ -3,8 +3,8 @@ from typing import IO, Sequence
 
 
 def grep(file: str | IO, words: Sequence[str]) -> str:
-    with open(file, 'r', encoding='UTF-8') if isinstance(file, str) else file:
-        for line in file:
+    with open(file, 'r', encoding='UTF-8') if isinstance(file, str) else file as file_obj:
+        for line in file_obj:
             found = False
             for word in words:
                 pattern = re.compile(rf'\b{word}\b', re.IGNORECASE)
