@@ -268,7 +268,7 @@ defining-attr-methods=__init__,
 exclude-protected=_asdict,_fields,_replace,_source,_make,os._exit
 
 # List of valid names for the first argument in a class method.
-valid-classmethod-first-arg=cls
+valid-classmethod-first-arg=mcs
 
 # List of valid names for the first argument in a metaclass class method.
 valid-metaclass-classmethod-first-arg=mcs
