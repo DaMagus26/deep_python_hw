@@ -1,31 +1,70 @@
-# Домашнее задание #02 (функции, декораторы)
+# Домашнее задание #04 (метаклассы, дескрипторы)
 
 ## Формулировка задачи
 
 ---
-### 1. Реализовать класс CustomList наследованием от list
+### 1. Метакласс, который в начале названий всех атрибутов и методов, кроме магических, добавляет префикс "custom_"
+  Подменяться должны атрибуты класса и атрибуты экземпляра класса, в том числе добавленные после выполнения конструктора (dynamic в примере).
 
-При этом:
-- CustomList должен наследоваться от встроенного списка `list`;
-- экземпляры CustomList можно складывать друг с другом и с обычными списками:
-  ```py
-  CustomList([5, 1, 3, 7]) + CustomList([1, 2, 7])  # CustomList([6, 3, 10, 7])
-  CustomList([1]) + [2, 5]  # CustomList([3, 5])
-  [2, 5] + CustomList([1])  # CustomList([3, 5])
-  ```
-- экземпляры CustomList поддерживают вычитание между собой и с обычными списками:
-  ```py
-  CustomList([5, 1, 3, 7]) - CustomList([1, 2, 7])  # CustomList([4, -1, -4, 7])
-  CustomList([1]) - [2, 5]  # CustomList([-1, -5])
-  [2, 5] - CustomList([1])  # CustomList([1, 5])
-  ```
-- результатом сложения/вычитания должен быть новый кастомный список;
-- при сложении/вычитании списков разной длины отсутствующие элементы меньшего списка считаются нулями;
-- при сложения/вычитания исходные списки должны оставаться неизменными;
-- при сравнении (==, !=, >, >=, <, <=) экземпляров CustomList должна сравниваться сумма элементов списков (сравнение с list не нужно);
-- должен быть переопределен str, чтобы выводились элементы списка и их сумма;
-- списки можно считать всегда числовыми.
+```py
+    class CustomMeta(...):
+        pass
 
+
+    class CustomClass(metaclass=CustomMeta):
+        x = 50
+
+        def __init__(self, val=99):
+            self.val = val
+
+        def line(self):
+            return 100
+
+        def __str__(self):
+            return "Custom_by_metaclass"
+
+
+    assert CustomClass.custom_x == 50
+    CustomClass.x  # ошибка
+
+    inst = CustomClass()
+    assert inst.custom_x == 50
+    assert inst.custom_val == 99
+    assert inst.custom_line() == 100
+    assert str(inst) == "Custom_by_metaclass"
+
+    inst.x  # ошибка
+    inst.val  # ошибка
+    inst.line() # ошибка
+    inst.yyy  # ошибка
+
+    inst.dynamic = "added later"
+    assert inst.custom_dynamic == "added later"
+    inst.dynamic  # ошибка
+```
+
+
+### 2. Дескрипторы с проверками типов и значений данных
+  Нужно сделать три дескриптора для какой-то области интереса (наука, финансы, хобби и тд), но если совсем не получается, то можно использовать шаблона ниже в качестве основы.
+
+```py
+    class Integer:
+        pass
+
+    class String:
+        pass
+
+    class PositiveInteger:
+        pass
+
+    class Data:
+        num = Integer()
+        name = String()
+        price = PositiveInteger()
+
+        def __init__(...):
+            ....
+```
 
 ## Решение
 
