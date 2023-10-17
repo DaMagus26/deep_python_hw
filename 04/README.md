@@ -73,7 +73,7 @@
 ### Описание решения
 
 
-Задание реализовано в файле `custom_list.py`. Тесты к нему находятся в файле `test_custom_list.py`.
+Задание реализовано в файлах `custom_metaclass.py` и `descriptors.py`. Тесты к ним находятся в файлах `test_custom_list.py` и `test_descriptors.py`.
 
 Перед проверкой задания необходимо установить все используемые модули:
 ```bash
@@ -89,7 +89,7 @@ pylint --rcfile .pylintrc
 
 Для запуска тестов для обоих заданий необходимо выполнить следующую команду:
 ```bash
-python3 -m unittest discover 03/
+python3 -m unittest discover 04/
 ```
 
 ### Отчет линтеров
