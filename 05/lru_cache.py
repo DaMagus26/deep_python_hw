@@ -19,7 +19,7 @@ class LRUCache:
     def __getitem__(self, item: Any) -> Any:
         element = self.__data.get(item, None)
         if element is not None:
-            del self.__data[item]
+            del self.__data[item]  # Сложность O(1)
             self.__data[item] = element
         return element
 
@@ -30,6 +30,7 @@ class LRUCache:
             # указатель на его первый элемент.
             # next просто вернет значение этого указателя
             # Тогда сложность получения последнего эл-та - O(1)
+            # dict.keys() – в Python 3 тоже O(1)
             first_element_idx = next(iter(self.__data.keys()))
             del self.__data[first_element_idx]  # O(1)
             self.__current_len -= 1

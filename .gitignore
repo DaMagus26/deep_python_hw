@@ -65,7 +65,7 @@ Temporary Items
 .idea/
 
 # playgrounds
-*playground.py
+*playground.*
 
 # AWS User-specific
 .idea/**/aws.xml
