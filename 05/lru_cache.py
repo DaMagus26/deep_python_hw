@@ -13,18 +13,17 @@ class LRUCache:
             raise TypeError('"max_size" must be an integer')
 
         self.__max_size: int = max_size
-        self.__current_len: int = 0
         self.__data: Dict = {}
 
     def __getitem__(self, item: Any) -> Any:
-        element = self.__data.get(item, None)
+        element = self.__data.get(item, None)  # Сложность O(1)
         if element is not None:
             del self.__data[item]  # Сложность O(1)
             self.__data[item] = element
         return element
 
     def __setitem__(self, key, value) -> None:
-        if self.__current_len + 1 > self.__max_size:
+        if len(self.__data) >= self.__max_size:
             # Если судить по реализации ф-ции iter(),
             # она не проходит по всему массиву, а лишь создает
             # указатель на его первый элемент.
@@ -33,10 +32,8 @@ class LRUCache:
             # dict.keys() – в Python 3 тоже O(1)
             first_element_idx = next(iter(self.__data.keys()))
             del self.__data[first_element_idx]  # O(1)
-            self.__current_len -= 1
 
         self.__data[key] = value
-        self.__current_len += 1
 
     @property
     def state(self) -> Dict:
