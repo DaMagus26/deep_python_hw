@@ -5,6 +5,9 @@ class SomeModel:
     def predict(self, message: str) -> float:
         # Чем больше доля гласных в сообщении, тем положительнее сообщение
 
+        if not isinstance(message, str):
+            raise TypeError(f"message must be a string, not {type(message)}")
+
         message = message.lower()
         vowels_list = ['а', 'е', 'ё', 'ю', 'я', 'и', 'ы', 'о', 'у', 'э',
                        'a', 'e', 'i', 'o', 'u']

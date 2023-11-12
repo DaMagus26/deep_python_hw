@@ -108,6 +108,14 @@ class TestLRUCache(unittest.TestCase):
         cache["filler3"] = 0
         self.assertEqual(cache["k1"], None)
 
+    def test_changing_existing_key_no_overflow(self):
+        cache = LRUCache(2)
+        cache["k1"] = 10
+        cache["k2"] = 20
+
+        self.assertEqual(cache["k1"], 10)
+        self.assertEqual(cache["k2"], 20)
+
 
 if __name__ == '__main__':
     unittest.main()
