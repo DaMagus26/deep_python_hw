@@ -116,6 +116,8 @@ class TestLRUCache(unittest.TestCase):
         self.assertEqual(cache["k1"], 10)
         self.assertEqual(cache["k2"], 20)
 
+        cache['k2'] = 30
+
 
 if __name__ == '__main__':
     unittest.main()

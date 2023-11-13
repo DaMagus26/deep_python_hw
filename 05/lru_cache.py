@@ -23,15 +23,20 @@ class LRUCache:
         return element
 
     def __setitem__(self, key, value) -> None:
-        if len(self.__data) >= self.__max_size:
-            # Если судить по реализации ф-ции iter(),
-            # она не проходит по всему массиву, а лишь создает
-            # указатель на его первый элемент.
-            # next просто вернет значение этого указателя
-            # Тогда сложность получения последнего эл-та - O(1)
-            # dict.keys() – в Python 3 тоже O(1)
-            first_element_idx = next(iter(self.__data.keys()))
-            del self.__data[first_element_idx]  # O(1)
+        element = self.__data.get(key, None)
+        if element is None:
+            if len(self.__data) >= self.__max_size:
+                # Если судить по реализации ф-ции iter(),
+                # она не проходит по всему массиву, а лишь создает
+                # указатель на его первый элемент.
+                # next просто вернет значение этого указателя
+                # Тогда сложность получения последнего эл-та - O(1)
+                # dict.keys() – в Python 3 тоже O(1)
+                first_element_idx = next(iter(self.__data.keys()))
+                del self.__data[first_element_idx]  # O(1)
+        else:
+            del self.__data[key]  # Сложность O(1)
+            self.__data[key] = value
 
         self.__data[key] = value
 
