@@ -2,9 +2,6 @@ from typing import Sequence
 
 
 class CustomList(list):
-    def __init__(self, lst: Sequence | None = None):
-        lst = lst or []
-        super().__init__(lst)
 
     def __add__(self, other):
         if not isinstance(other, list):
