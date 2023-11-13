@@ -11,7 +11,7 @@ class TestPredictMessage(unittest.TestCase):
         with self.assertRaises(TypeError):
             predict_message_mood('text', object())
 
-    def test_invalid_thrash(self):
+    def test_invalid_thresh(self):
         self.model.predict.return_value = 0.2
         with self.assertRaises(RuntimeError):
             predict_message_mood('text',
@@ -49,7 +49,8 @@ class TestPredictMessage(unittest.TestCase):
         self.model.predict.return_value = 0.2
         self.assertEqual(
             predict_message_mood('text',
-                                 model=self.model), 'неуд')
+                                 model=self.model,
+                                 bad_thresholds=0.3), 'неуд')
         self.assertEqual(
             predict_message_mood('text',
                                  model=self.model,
@@ -59,14 +60,18 @@ class TestPredictMessage(unittest.TestCase):
         self.model.predict.return_value = 0.3
         self.assertEqual(
             predict_message_mood('text',
-                                 model=self.model), 'норм')
+                                 model=self.model,
+                                 bad_thresholds=0.25,
+                                 good_thresholds=0.35), 'норм')
         self.assertEqual(
             predict_message_mood('text',
                                  model=self.model,
-                                 bad_thresholds=0.3), 'норм')
+                                 bad_thresholds=0.3,
+                                 good_thresholds=0.35), 'норм')
         self.assertEqual(
             predict_message_mood('text',
                                  model=self.model,
+                                 bad_thresholds=0.25,
                                  good_thresholds=0.3), 'норм')
         self.assertEqual(
             predict_message_mood('text',
@@ -78,6 +83,18 @@ class TestPredictMessage(unittest.TestCase):
         self.model.predict.return_value = 0.3
         with self.assertRaises(TypeError):
             print(predict_message_mood(None, model=self.model))
+
+    def test_predict_message_type(self) -> None:
+        self.model.predict.return_value = 0.4
+        _ = predict_message_mood('text', model=self.model)
+
+        call_args = self.model.predict.call_args_list[-1].args
+        self.assertEqual(
+            len(call_args), 1
+        )
+        self.assertIsInstance(
+            call_args[0], str
+        )
 
 
 if __name__ == '__main__':
