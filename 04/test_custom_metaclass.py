@@ -105,6 +105,36 @@ class TestCustomMeta(unittest.TestCase):
         self.assertNotIn('new_attr', ex.__dict__)
         self.assertEqual(ex.new_custom_attr, 10)
 
+    def test_adding_magic_methods_when_setattr_undefined(self):
+        class Example(metaclass=CustomMeta):
+            pass
+
+        ex = Example()
+        ex.__magic__ = 10
+        self.assertIn('__magic__', ex.__dict__)
+        self.assertNotIn('custom___attr__', ex.__dict__)
+        self.assertEqual(ex.__magic__, 10)
+
+    def test_adding_magic_methods_when_setattr_defined(self):
+        class Example(metaclass=CustomMeta):
+            def __setattr__(self, key, value):
+                self.__dict__['new_' + key] = value
+
+        ex = Example()
+        ex.__magic__ = 10
+        self.assertIn('new___magic__', ex.__dict__)
+        self.assertNotIn('custom___magic__', ex.__dict__)
+        self.assertNotIn('new_custom___magic__', ex.__dict__)
+        self.assertEqual(ex.new___magic__, 10)
+
+    def test_str(self):
+        class Example(metaclass=CustomMeta):
+            def __str__(self):
+                return 'Custom_by_metaclass'
+
+        ex = Example()
+        self.assertEqual(str(ex), 'Custom_by_metaclass')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -13,10 +13,16 @@ class CustomMeta(type):
         setattr_method = new_dct.get('__setattr__', None)
 
         def __setattr__(self, key, value):
-            if setattr_method:
-                setattr_method(self, 'custom_' + key, value)
+            if not key.startswith("__") or not key.endswith("__"):
+                if setattr_method:
+                    setattr_method(self, 'custom_' + key, value)
+                else:
+                    self.__dict__['custom_' + key] = value
             else:
-                self.__dict__['custom_' + key] = value
+                if setattr_method:
+                    setattr_method(self, key, value)
+                else:
+                    self.__dict__[key] = value
 
         new_dct['__setattr__'] = __setattr__
         cls_instance = super().__new__(mcs, name, bases, new_dct)

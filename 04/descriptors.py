@@ -1,4 +1,4 @@
-from typing import Any, Sequence
+from typing import Any, Sequence, Optional
 import re
 
 
@@ -8,10 +8,12 @@ class FloatListTable:
             nrows: int = 0,
             ncols: int = 0,
             fill_value: Any = None) -> None:
-        self.data: Sequence[Sequence[float]] = [[fill_value] * ncols] * nrows
+
+        self.default_data: Sequence[Sequence[float]] = [[fill_value] * ncols] * nrows
+        self.data_attr = 'data_attr'
 
     def __get__(self, instance, owner) -> Sequence[Sequence[float]]:
-        return self.data
+        return getattr(instance, self.data_attr, self.default_data)
 
     def __set__(self, instance, value: Sequence[Sequence[float]]):
         if not isinstance(value, list):
@@ -27,17 +29,17 @@ class FloatListTable:
         if not all(isinstance(item, float) for row in value for item in row):
             raise TypeError('all elements must be of type float')
 
-        self.data = value
+        setattr(instance, self.data_attr, value)
 
 
 class Time:
     def __init__(self):
-        self.hours: int = 0
-        self.minutes: int = 0
-        self.seconds: float = 0.0
+        self.time_attr: str = 'time_attr'
 
     def __get__(self, instance, owner) -> float:
-        return self.hours * self.minutes + self.seconds / 100
+        time = getattr(instance, self.time_attr,
+                       {'hours': 0, 'minutes': 0, 'seconds': 0})
+        return time['hours'] * time['minutes'] + time['seconds'] / 100
 
     def __set__(self, instance, value: tuple[int, int, int | float]):
         if not isinstance(value, tuple):
@@ -64,17 +66,20 @@ class Time:
                 'seconds must be a value between 0 (inclusive) '
                 'and 60 (exclusive)')
 
-        self.hours = hours
-        self.minutes = minutes
-        self.seconds = float(seconds)
+        time = {
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': float(seconds)
+        }
+        setattr(instance, self.time_attr, time)
 
 
 class UserTag:
     def __init__(self) -> None:
-        self.tag: str = ''
+        self.tag_attr: str = ''
 
     def __get__(self, instance, owner) -> str:
-        return self.tag
+        return getattr(instance, self.tag_attr, '')
 
     def __set__(self, instance, value: str):
         if not isinstance(value, str):
@@ -88,7 +93,7 @@ class UserTag:
             raise ValueError(
                 'tag may only contain digits, english letters and underscore')
 
-        self.tag = value
+        setattr(instance, self.tag_attr, value)
 
 
 class DataBase:
