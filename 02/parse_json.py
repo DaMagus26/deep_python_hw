@@ -18,6 +18,7 @@ def parse_json(
         if value:
             for keyword in keywords:
                 pattern = re.compile(rf'\b{keyword}\b', re.IGNORECASE)
-                search_result = re.search(pattern, value)
-                if search_result:
-                    keyword_callback(search_result.group(0))
+                search_result = re.findall(pattern, value)
+                for item in search_result:
+                    if item:
+                        keyword_callback(field, item)

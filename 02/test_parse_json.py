@@ -72,9 +72,9 @@ class TestParseJson(unittest.TestCase):
                    keyword_callback=mock_callback)
 
         self.assertEqual(mock_callback.call_count, 1)
-        self.assertEqual(mock_callback.call_args, mock.call('word3'))
+        self.assertEqual(mock_callback.call_args, mock.call('key2', 'word3'))
 
-    def test_several_valid_fields(self):
+    def test_multiple_valid_fields(self):
         mock_callback = mock.Mock()
         json_str = '{"key1": "Word1 word2", "key2": "word3 word4"}'
         parse_json(json_str,
@@ -83,15 +83,15 @@ class TestParseJson(unittest.TestCase):
                    keyword_callback=mock_callback)
 
         expected_calls = [
-            mock.call('word2'),
-            mock.call('Word1'),
-            mock.call('word3'),
+            mock.call('key1', 'word2'),
+            mock.call('key1', 'Word1'),
+            mock.call('key2', 'word3')
         ]
 
         self.assertEqual(mock_callback.call_count, 3)
         self.assertListEqual(mock_callback.call_args_list, expected_calls)
 
-    def test_ignore_case(self):
+    def test_ignore_case_for_keyword(self):
         mock_callback = mock.Mock()
         json_str = '{"key1": "Word1 word2", "key2": "word1 word4"}'
         parse_json(json_str,
@@ -100,8 +100,80 @@ class TestParseJson(unittest.TestCase):
                    keyword_callback=mock_callback)
 
         expected_calls = [
-            mock.call('Word1'),
-            mock.call('word1'),
+            mock.call('key1', 'Word1'),
+            mock.call('key2', 'word1')
         ]
 
         self.assertListEqual(mock_callback.call_args_list, expected_calls)
+
+    def test_check_case_for_field(self):
+        mock_callback = mock.Mock()
+        json_str = '{"key1": "Word1 word2", "Key2": "word1 word4"}'
+        parse_json(json_str,
+                   required_fields=['key1', 'key2'],
+                   keywords=['word1'],
+                   keyword_callback=mock_callback)
+
+        expected_calls = [
+            mock.call('key1', 'Word1'),
+        ]
+
+        self.assertListEqual(mock_callback.call_args_list, expected_calls)
+
+    def test_multiple_required_fields_and_keywords(self):
+        mock_callback = mock.MagicMock()
+        json_str = '{"key1": "word1 word2", "key2": "word1 word4", "key3": "word3 word4"}'
+        parse_json(
+            json_str,
+            required_fields=["key1", "key3"],
+            keywords=["word1", "word3", "word4"],
+            keyword_callback=mock_callback,
+        )
+
+        expected_calls = [
+            mock.call("key1", "word1"),
+            mock.call("key3", "word3"),
+            mock.call("key3", "word4"),
+        ]
+
+        self.assertListEqual(mock_callback.call_args_list, expected_calls)
+
+    def test_no_matching_keywords(self):
+        mock_callback = mock.MagicMock()
+        json_str = '{"key1": "word1 word2", "key2": "word1 word4", "key3": "word3 word4"}'
+        parse_json(
+            json_str,
+            required_fields=["key1", "key3"],
+            keywords=["word1", "word3", "word5"],
+            keyword_callback=mock_callback,
+        )
+
+        expected_calls = [
+            mock.call("key1", "word1"),
+            mock.call("key3", "word3"),
+        ]
+
+        self.assertListEqual(mock_callback.call_args_list, expected_calls)
+        
+    def test_multiple_keywords_in_one_field(self):
+        mock_callback = mock.MagicMock()
+        json_str = '{"key1": "word1 word2", "key2": "word2 word2"}'
+        parse_json(
+            json_str,
+            required_fields=["key1", "key2"],
+            keywords=["word1", "word2"],
+            keyword_callback=mock_callback,
+        )
+        
+        expected_calls = [
+            mock.call("key1", "word1"),
+            mock.call("key1", "word2"),
+            mock.call("key2", "word2"),
+            mock.call("key2", "word2"),
+        ]
+        
+        self.assertListEqual(mock_callback.call_args_list, expected_calls)
+
+
+if __name__ == '__main__':
+    unittest.main()
