@@ -67,9 +67,11 @@ class CustomFilter(logging.Filter):
 
 
 def setup_logger(
-        file_path: str,
+        filter_flag: Optional[bool] = False,
         stdout: Optional[bool] = False,
 ) -> logging.Logger:
+    file_path = 'cache.log'
+
     # Validating input
     file_path = file_path.strip()
 
@@ -78,9 +80,10 @@ def setup_logger(
 
     # Setting up file handler
     file_handler = logging.FileHandler(file_path, 'w')
-    file_formatter = logging.Formatter('%(asctime)s [%(name)s:%(levelname)s] %(message)s')
-    file_handler.addFilter(CustomFilter())
+    file_formatter = logging.Formatter("%(asctime)s [%(name)s:%(levelname)s] %(message)s")
     file_handler.setFormatter(file_formatter)
+    if filter_flag:
+        file_handler.addFilter(CustomFilter())
     file_handler.setLevel(logging.INFO)
     logger.addHandler(file_handler)
 
@@ -89,6 +92,8 @@ def setup_logger(
         stdout_handler = logging.StreamHandler()
         stdout_formatter = logging.Formatter('%(name)-8s %(message)s (%(levelname)s)')
         stdout_handler.setFormatter(stdout_formatter)
+        if filter_flag:
+            stdout_handler.addFilter(CustomFilter())
         stdout_handler.setLevel(logging.DEBUG)
         logger.addHandler(stdout_handler)
 
@@ -96,7 +101,7 @@ def setup_logger(
 
 
 def run_test(args):
-    logger = setup_logger(args.filepath, args.stdout)
+    logger = setup_logger(args.filter, args.stdout)
     cache = LRUCache(2, logger)
     
     cache["k1"] = "val1"
@@ -116,7 +121,7 @@ def run_test(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--stdout', action='store_true')
-    parser.add_argument('-f', '--filepath', type=str, default='cache.log')
+    parser.add_argument('-f', '--filter', action='store_true')
     args = parser.parse_args()
 
     run_test(args)
